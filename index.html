@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Browser Interface</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="browser-container">
+        <div class="browser-header">
+            <div class="navigation-bar">
+                <button id="back-btn">←</button>
+                <button id="forward-btn">→</button>
+                <button id="refresh-btn">↻</button>
+                <input type="text" id="url-bar" placeholder="Enter URL...">
+                <button id="go-btn">Go</button>
+            </div>
+        </div>
+        <div class="browser-content">
+            <iframe id="webview" src="about:blank"></iframe>
+        </div>
+    </div>
+    <script src="js/browser.js"></script>
+</body>
+</html>
