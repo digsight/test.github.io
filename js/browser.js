@@ -1,33 +1,57 @@
-// Add tab functionality
-class TabManager {
+class WebBrowser {
     constructor() {
-        this.tabs = new Map();
-        this.activeTab = null;
-        this.tabCounter = 0;
+        this.webview = document.getElementById('webview');
+        this.urlBar = document.getElementById('url-bar');
+        this.setupEventListeners();
     }
 
-    createTab(url = 'about:blank') {
-        const tabId = `tab-${this.tabCounter++}`;
-        // Implement tab creation logic
+    setupEventListeners() {
+        document.getElementById('back-btn').addEventListener('click', () => {
+            this.webview.contentWindow.history.back();
+        });
+
+        document.getElementById('forward-btn').addEventListener('click', () => {
+            this.webview.contentWindow.history.forward();
+        });
+
+        document.getElementById('refresh-btn').addEventListener('click', () => {
+            this.webview.contentWindow.location.reload();
+        });
+
+        document.getElementById('go-btn').addEventListener('click', () => {
+            this.navigateTo(this.urlBar.value);
+        });
+
+        this.urlBar.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.navigateTo(this.urlBar.value);
+            }
+        });
+
+        // Update URL bar when iframe navigates
+        this.webview.addEventListener('load', () => {
+            this.urlBar.value = this.webview.contentWindow.location.href;
+        });
     }
 
-    closeTab(tabId) {
-        // Implement tab closing logic
+    navigateTo(url) {
+        if (!url) return;
+        
+        // Add protocol if missing
+        if (!url.startsWith('http://') && !url.startsWith('https://')) {
+            url = 'https://' + url;
+        }
+        
+        try {
+            this.webview.src = url;
+            this.urlBar.value = url;
+        } catch (error) {
+            console.error('Navigation error:', error);
+        }
     }
 }
 
-// Add bookmark functionality
-class BookmarkManager {
-    constructor() {
-        this.bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
-    }
-
-    addBookmark(url, title) {
-        this.bookmarks.push({ url, title });
-        this.save();
-    }
-
-    save() {
-        localStorage.setItem('bookmarks', JSON.stringify(this.bookmarks));
-    }
-}
+// Initialize the browser when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    new WebBrowser();
+});
